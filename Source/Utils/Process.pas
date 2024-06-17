@@ -410,6 +410,7 @@ begin
   else
     Size := 8;
   Rtti := 0;
+  vTable := 0;
   if not Read(Address, @vTable, Size) then
     Exit;
   if not Read(vTable - SIZE_T(Size), @Rtti, Size) then

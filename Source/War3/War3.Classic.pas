@@ -1,7 +1,6 @@
 {
  @auhtor leehoegyu (https://github.com/leehoegyu)
 }
-
 unit War3.Classic;
 
 interface
