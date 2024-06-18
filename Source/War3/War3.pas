@@ -136,6 +136,7 @@ class operator TWar3Id.NotEqual(const Left: TWar3Id; const Right: TWar3Id): Bool
 begin
   Result := Left.Value <> Right.Value;
 end;
+
 class operator TWar3Id.NotEqual(const Left: TWar3Id; const Right: string): Boolean;
 begin
   Result := string(Left.Name) <> Right;
