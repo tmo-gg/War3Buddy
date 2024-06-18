@@ -514,7 +514,7 @@ var
   NumberOfSections: Word;
 begin
   FHandle := OpenProcess(MAXIMUM_ALLOWED, False, ProcessId);
-  if FHandle = INVALID_HANDLE_VALUE then
+  if FHandle = 0 then
     raise Exception.Create('OpenProcess() FAILED');
   IsWow64Process(FHandle, @FWow64);
   NtQueryInformationProcess(FHandle, 0, @pbi, Sizeof(pbi), @ReturnLength);
