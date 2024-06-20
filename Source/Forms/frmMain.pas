@@ -74,7 +74,7 @@ var
   TimerRemaining: string;
   Point: TPoint;
   Rect: TRect;
-  Scale: Single;
+  Scale, RemainigTime: Single;
 const
   SPELL_NAME: array[0..2]of string = ('탐색', '해적단', '스모커');
   STANDARD_HEIGHT = 600;
@@ -101,7 +101,11 @@ begin
 
   TimerRemaining := '';
   for i := 0 to High(SpellTimer) do
-    TimerRemaining := TimerRemaining + Format('%s %s', [SPELL_NAME[i], TimeToStr(Round(War3.GetTimerRemaining(SpellTimer[i])))]) + #13#10;
+  begin
+    RemainigTime := War3.GetTimerRemaining(SpellTimer[i]);
+    if RemainigTime > 0 then
+      TimerRemaining := TimerRemaining + Format('%s %s', [SPELL_NAME[i], TimeToStr(Round(RemainigTime))]) + #13#10;
+  end;
 
   SetWindowPos(OverlayForm.Handle, GetWindow(War3.hWnd, GW_HWNDPREV), 0, 0, 0, 0, SWP_NOMOVE or SWP_NOSIZE);
   Point := TPoint.Zero;

@@ -34,7 +34,7 @@ type
     function GetChatEditBox: SIZE_T;
     function GetChatEditBoxText: SIZE_T;
     procedure SetChatLen(Value: Integer);
-    const SupportedVersion = '1.36.2.21228';
+    const SupportedVersion = '1.36.2.21230';
   protected
     function sub_6F08A600(timer: SIZE_T; output: PDWORD): Pointer; override;
     function GetData(Hash: TWar3Hash): SIZE_T; override;
@@ -156,7 +156,7 @@ var
   delta: SIZE_T;
   Next: Boolean;
 const
-  Obfuscated: SIZE_T = $B23D8;
+  Obfuscated: SIZE_T = $B0390;
 begin
   Result := False;
   PebRefer := nil;
@@ -271,7 +271,7 @@ var
   Entry, DataTable, DataObject: SIZE_T;
 begin
   Result := 0;
-  Entry := Self.Read<SIZE_T>(RvaToVa($2A6F1D8));
+  Entry := Self.Read<SIZE_T>(RvaToVa($2A0D1C8));
   if (Hash[0] shr 31) = 0 then
   begin
     if Hash[0] >= Self.Read<DWORD>(Entry + $30) then
@@ -372,15 +372,15 @@ end;
 
 function TWar3Reforged.Global: SIZE_T;
 begin
-  Result := RvaToVa($2A47580);
+  Result := RvaToVa($29E5580);
 end;
 
 function TWar3Reforged.GetGameWar3: SIZE_T;
 var
   GameWar3: SIZE_T;
 begin
-  GameWar3 := $8FA1EEB517231AE4 - Self.Read<SIZE_T>(RvaToVa($2A47AF5));
-  Result := GameWar3 xor Self.Read<SIZE_T>(RvaToVa($2AC6250));
+  GameWar3 := rol(Self.Read<SIZE_T>(RvaToVa($29E6224)), 10) xor $4D99E91D1AE9B95D;
+  Result := GameWar3 xor Self.Read<SIZE_T>(RvaToVa($2A64180));
 end;
 
 function TWar3Reforged.GetGameUI: SIZE_T;
@@ -390,14 +390,13 @@ var
 begin
   with ctx do
   begin
-    v1 := $604177965D7B1138;
-    v0 := $82383F098A7CF81F;
+    v1 := $AC5AF63E30BB4068;
+    v0 := $7EDFD7B880D30200;
     Generate(v0, v1);
-    R12 := Global;
-    R9 := Self.Read<DWORD64>(RvaToVa($2AC8E88));
-    R8 := v1;
-    Rax := R8 shr 52;
-    Rax := Self.Read<DWORD64>(Rax + R12);
+    R9 := Self.Read<DWORD64>(RvaToVa($2A66E08));
+    Rax := v1 and $FFF;
+    Rsi := Global;
+    Rax := Self.Read<DWORD64>(Rax + Rsi);
     Rdx := DWORD(R9);
     Rax := not Rax;
     Rax := DWORD(Rax xor R9);
@@ -405,36 +404,34 @@ begin
     R9 := R9 xor Rax;
     R9 := R9 shl 32;
     R9 := R9 or Rdx;
-    R8 := R8 and $FFF;
-    Rcx := Self.Read<DWORD64>(R8 + R12);
-    Rcx := Rcx shr 32;
-    Rdx := DWORD(R9);
-    Rcx := rol(DWORD(Rcx), 9);
-    Rax := DWORD(R9 + R9);
-    Rax := DWORD(Rax - Rcx);
-    Rcx := DWORD(Rax);
+    Rcx := DWORD(R9);
+    Rax := DWORD(R9 - $02405090);
     R9 := R9 shr 32;
-    R9 := R9 xor Rcx;
+    R9 := R9 xor Rax;
     R9 := R9 shl 32;
-    R9 := R9 or Rdx;
+    R9 := R9 or Rcx;
     R9 := R9 xor v0;
+    R8 := v1;
+    Rax := R8 shr 52;
+    Rcx := Self.Read<DWORD64>(Rax + Rsi);
     Rdx := DWORD(R9);
-    Rdi := $8A7CF81F;
-    Rcx := DWORD(Rdi - R9);
+    Rcx := ror(DWORD(Rcx), 3);
+    Rcx := DWORD(Rcx + Rcx);
+    Rcx := DWORD(Rcx - R9);
     R9 := R9 shr 32;
     R9 := R9 xor Rcx;
     R9 := R9 shl 32;
     R9 := R9 or Rdx;
-    Rax := v1 shr 52;
-    Rax := Self.Read<DWORD64>(Rax + R12);
+    R8 := R8 and $FFF;
+    Rax := Self.Read<DWORD64>(R8 + Rsi);
     Rax := Rax shr 32;
-    Rdx := DWORD(R9);
+    Rcx := DWORD(R9);
     Rax := rol(DWORD(Rax), 1);
     Rax := DWORD(Rax + R9);
     R9 := R9 shr 32;
     R9 := R9 xor Rax;
     R9 := R9 shl 32;
-    Result := R9 or Rdx;
+    Result := R9 or Rcx;
   end;
 end;
 
@@ -451,65 +448,66 @@ begin
   with ctx do
   begin
     Rbx := GameUI;
-    v1 := $4962058C778AF772;
-    v0 := $BDF214FDA28F929D;
+    v1 := $A65495A59D3772FE;
+    v0 := $69E289909D1445CF;
     Generate(v0, v1);
-    R9 := Self.Read<DWORD64>(Rbx + $690);
+    R8 := Self.Read<DWORD64>(Rbx + $660);
     Rbx := Global;
     Rax := v1 and $FFF;
-    R8 := DWORD(R9);
-    Rdx := DWORD(R9);
     R11 := $FFFFFFFF00000000;
-    R9 := R9 and R11;
-    Rcx := Self.Read<DWORD64>(Rax + Rbx);
-    R8 := DWORD(R8 - Rcx);
-    R8 := R8 shl 32;
-    R8 := R8 xor R9;
-    R8 := R8 or Rdx;
-    R10 := DWORD(R8 + $420DEB03);
-    Rcx := DWORD(R8);
-    R10 := R10 shl 32;
+    Rdx := Self.Read<DWORD64>(Rax + Rbx);
+    Rdx := not Rdx;
+    Rax := DWORD(R8);
+    Rdx := DWORD(Rdx xor R8);
     R8 := R8 and R11;
-    R10 := R10 xor R8;
+    Rdx := Rdx shl 32;
+    Rdx := Rdx xor R8;
+    Rdx := Rdx or Rax;
+    R10 := DWORD(Rdx * 2 + $3AECDF2D);
+    Rcx := DWORD(Rdx);
+    R10 := R10 shl 32;
+    Rdx := Rdx and R11;
+    R10 := R10 xor Rdx;
     R10 := R10 or Rcx;
     R10 := R10 xor v0;
     R8 := v1;
+    R9 := DWORD(R10);
+    R9 := not R9;
     Rdx := DWORD(R10);
+    R10 := R10 and R11;
     Rax := R8 shr 52;
     Rcx := Self.Read<DWORD64>(Rax + Rbx);
-    Rcx := ror(DWORD(Rcx), 3);
-    R9 := DWORD(Rcx + Rcx);
-    R9 := DWORD(R9 - R10);
-    R10 := R10 and R11;
+    Rcx := ror(DWORD(Rcx), 11);
+    R9 := DWORD(R9 xor Rcx);
     R9 := R9 shl 32;
     R9 := R9 xor R10;
     R9 := R9 or Rdx;
     R8 := R8 and $FFF;
     Rcx := DWORD(R9);
-    Rdx := DWORD(R9);
-    R9 := R9 and R11;
     Rax := Self.Read<DWORD64>(R8 + Rbx);
     Rax := Rax shr 32;
-    Rax := Rax xor Rcx;
+    Rax := not Rax;
+    Rax := DWORD(Rax xor R9);
+    R9 := R9 and R11;
     Rax := Rax shl 32;
     Rax := Rax xor R9;
-    Result := Rax or Rdx;
+    Result := Rax or Rcx;
   end;
 end;
 
 function TWar3Reforged.GetGameState: SIZE_T;
 begin
-  Result := Self.Read<SIZE_T>(GetGameWar3 + $2650);
+  Result := Self.Read<SIZE_T>(GetGameWar3 + $2638);
 end;
 
 function TWar3Reforged.GetLocalIndex: Integer;
 begin
-  Result := Self.Read<Word>(GetGameWar3 + $265C);
+  Result := Self.Read<Word>(GetGameWar3 + $2644);
 end;
 
 function TWar3Reforged.GetPlayerWar3(Index: Integer): SIZE_T;
 begin
-  Result := Self.Read<SIZE_T>(GetGameWar3 + $26C8 + SIZE_T(Index * 8));
+  Result := Self.Read<SIZE_T>(GetGameWar3 + $26B8 + SIZE_T(Index * 8));
 end;
 
 function TWar3Reforged.GetPlayerName(Index: Integer): string;
@@ -557,7 +555,7 @@ var
 begin
   WorldFrameWar3 := GetWorldFrameWar3;
   if WorldFrameWar3 <> 0 then
-    Result := Self.Read<TWar3UnitManager>(WorldFrameWar3 + $B98)
+    Result := Self.Read<TWar3UnitManager>(WorldFrameWar3 + $B90)
   else
     ZeroMemory(@Result, SizeOf(Result));
 end;
@@ -632,7 +630,7 @@ var
   Hash: TWar3Hash;
 begin
   Result.Value := 0;
-  Inventory := Self.Read<SIZE_T>(Address + $5A0);
+  Inventory := Self.Read<SIZE_T>(Address + $598);
   if (Inventory = 0) or (Self.Read<Integer>(Inventory + $D0) <= Index) then
     Exit;
 
@@ -651,7 +649,7 @@ var
   FileName: array[0..MAX_PATH - 1]of AnsiChar;
 begin
   ZeroMemory(@FileName[0], MAX_PATH);
-  Self.Read(RvaToVa($296A700), @FileName[0], MAX_PATH);
+  Self.Read(RvaToVa($2908700), @FileName[0], MAX_PATH);
   if FileName = 'No map loaded' then
     Result := ''
   else
@@ -703,7 +701,7 @@ var
   EditBox: SIZE_T;
 begin
   EditBox := GetChatEditBox;
-  Result := (EditBox <> 0) and (Self.Read<SIZE_T>(RvaToVa($2A4D558)) = EditBox);
+  Result := (EditBox <> 0) and (Self.Read<SIZE_T>(RvaToVa($29EB558)) = EditBox);
 end;
 
 function TWar3Reforged.GetPackageType: TWar3PackageType;
